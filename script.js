@@ -17,12 +17,16 @@ function getHumanChoice() {
 
 
 function playGame() {
-
+    const MAX_POINTS = 5;
     const result = document.querySelector("#result")
     result.print = function(text){
         p = document.createElement('p');
         p.textContent = text;
         this.appendChild(p);
+    }
+
+    result.flush = function(){
+        this.textContent = null;
     }
 
     const you = document.querySelector('#you');
@@ -45,6 +49,7 @@ function playGame() {
 
 
     function playRound(humanChoice, computerChoice) {
+        result.flush();
         if (humanChoice == computerChoice)
             result.print('Tie!');
         else if (
@@ -62,7 +67,7 @@ function playGame() {
         button.addEventListener('click', event => {
             choice = event.target.textContent;
             playRound(choice, getComputerChoice());
-            if(humanScore == 5 || computerScore == 5){
+            if(humanScore == MAX_POINTS || computerScore == MAX_POINTS){
                 checkEndgame();
             }     
         });
@@ -76,6 +81,8 @@ function playGame() {
             winner = humanScore >= computerScore ? 'YOU' : 'COMPUTER';
             result.print(`RESULT : ${winner} won the game`);
         }
+
+        document.querySelectorAll('button').forEach(button => button.disabled = true);
     }
     
 }
